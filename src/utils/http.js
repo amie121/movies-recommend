@@ -23,7 +23,6 @@ axios.interceptors.response.use(
 );
 
 function errorState(response) {
-  console.log(response);
   // loading
   // 如果http状态码正常，则直接返回数据
   if (
@@ -43,9 +42,7 @@ function errorState(response) {
   }
 }
 
-function successState(res) {
-  console.log(res);
-}
+function successState(res) {}
 const httpServer = (opts, data) => {
   let Public = {
     //公共参数

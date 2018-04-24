@@ -4,29 +4,53 @@ const express = require('express');
 const router = express.Router();
 
 /************** 登录模块 **************/
-// 创建账号
-router.post('/api/login/createAccount', (req, res) => {
-  let newAccount = new models.Login({
-    account: req.body.account,
-    password: req.body.password
-  });
-  newAccount.save((err, data) => {
+// 创建账号--用户注册
+router.post('/api/login/createUser', (req, res) => {
+  const user = req.body.user;
+  const password = req.body.password;
+
+  models.Login.find({ user }, (err, result) => {
     if (err) {
-      res.send(err);
+      console.log(err);
+    }
+    if (result.length === 0) {
+      let newUser = new models.Login({
+        user,
+        password
+      });
+      newUser.save((err, data) => {
+        if (err) {
+          res.send({ success: false, errTxt: err });
+        } else {
+          res.send({ success: true });
+        }
+      });
     } else {
-      res.send('Create success');
+      res.send({ success: false, errTxt: '该用户已存在' });
     }
   });
 });
 
-// 获取全部账号
-router.get('/api/login/getAccount', (req, res) => {
+// 用户登录
+router.post('/api/login/loginUser', (req, res) => {
   // 查找数据库
-  models.Login.find((err, data) => {
+  const user = req.body.user;
+  const password = req.body.password;
+
+  models.Login.find({ user }, (err, result) => {
     if (err) {
-      res.send(err);
+      console.log(err);
+    }
+    if (!result || result.length === 0) {
+      res.send({
+        success: false,
+        errTxt: '该用户不存在！请先注册。'
+      });
     } else {
-      res.send(data);
+      res.send({
+        success: true,
+        match: result[0].password === password
+      });
     }
   });
 });
