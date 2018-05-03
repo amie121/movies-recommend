@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
 import Login from '@/components/login';
 import Home from '@/components/home';
 import Category from '@/components/home/movie-category';
@@ -17,7 +16,7 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: 'category',
+          path: '/',
           name: 'Category',
           component: Category
         },

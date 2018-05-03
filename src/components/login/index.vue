@@ -26,8 +26,7 @@
 </template>
 
 <script>
-import http from '../../utils/http';
-import apiUrl from '../../utils/ApiSetting';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -57,44 +56,38 @@ export default {
             trigger: 'blur'
           }
         ]
-      },
-      modal1: false,
-      modelContent: ''
+      }
     };
   },
   methods: {
     signup(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          http(apiUrl.signup, {
+          this.httpSignup({
             user: this.loginForm.user,
             password: this.loginForm.password
-          })
-            .then(res => {
-              const data = res.data;
-              if (data.success) {
-                this.$Message.success('注册成功！请登录');
-                this.loginForm.password = '';
-              } else {
-                const errTxt = data.errTxt;
-                this.$Message.error(`注册失败!${errTxt}`);
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          }).then(data => {
+            if (data.success) {
+              this.$Message.success('注册成功！请登录');
+              this.loginForm.password = '';
+            } else {
+              const errTxt = data.errTxt;
+              this.$Message.error(`注册失败!${errTxt}`);
+            }
+          });
         }
       });
     },
     login(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          http(apiUrl.login, {
-            user: this.loginForm.user,
-            password: this.loginForm.password
-          })
-            .then(res => {
-              const data = res.data;
+          console.log(this.a_login());
+          this.$store
+            .dispatch('login', {
+              user: this.loginForm.user,
+              password: this.loginForm.password
+            })
+            .then(data => {
               if (data.success) {
                 if (data.match) {
                   // TODO: 登陆成功跳转逻辑
@@ -105,13 +98,11 @@ export default {
               } else {
                 this.$Message.error('该用户不存在！请先注册');
               }
-            })
-            .catch(err => {
-              console.log(err);
             });
         }
       });
     }
+    // ...mapActions({ httpSignup: 'signup', httpLogin: 'login' })
   }
 };
 </script>
