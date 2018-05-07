@@ -1,6 +1,4 @@
 const state = {
-  isLogin: false,
-  username: '',
   likeList: []
 };
 

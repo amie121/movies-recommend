@@ -3,8 +3,8 @@
     <nav class="nav">
       <div class="nav-user">
         <Icon type="person"> </Icon>
-        <span> 欢迎您,Username</span>
-        <a href="" class="logout">退出</a>
+        <span> 欢迎您,{{username}}</span>
+        <span class="logout" @click="logout">退出</span>
       </div>
     </nav>
     <div class="main">
@@ -33,14 +33,31 @@
 </template>
 
 <script>
+import { getCookie, delCookie } from '../../utils/cookie';
 import movieBlock from './movie-block';
 import likeList from './like-list';
 
 export default {
   data() {
     return {
+      username: '',
       search: ''
     };
+  },
+  mounted() {
+    /*页面挂载获取保存的cookie值，渲染到页面上*/
+    let uname = getCookie('username');
+    this.username = uname;
+    /*如果cookie不存在，则跳转到登录页*/
+    if (uname == '') {
+      this.$router.push('/login');
+    }
+  },
+  methods: {
+    logout() {
+      delCookie('username');
+      this.$router.push('/login');
+    }
   },
   components: {
     MovieBlock: movieBlock,
@@ -63,6 +80,7 @@ export default {
   margin-left: 10px;
   margin-right: 10px;
   color: bisque;
+  cursor: pointer;
 
   &:hover {
     color: #fff;

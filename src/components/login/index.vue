@@ -2,7 +2,7 @@
   <div class="login-wrapper">
     <div class="login">
       <img src="../../assets/images/login.jpeg" alt="login_page" class="login-img" width="400">
-      <div class="login-form">
+      <div class="login-form" @keyup.enter="login('loginForm')">
         <div class="title">Movies Recommand</div>
         <Form ref="loginForm" :model="loginForm" :rules="loginRules">
           <FormItem prop="user">
@@ -27,6 +27,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { setCookie, getCookie } from '../../utils/cookie';
 
 export default {
   data() {
@@ -59,11 +60,16 @@ export default {
       }
     };
   },
+  mounted() {
+    if (getCookie('username')) {
+      this.$router.push('/home');
+    }
+  },
   methods: {
     signup(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.httpSignup({
+          this.Signup({
             user: this.loginForm.user,
             password: this.loginForm.password
           }).then(data => {
@@ -81,28 +87,32 @@ export default {
     login(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          console.log(this.a_login());
-          this.$store
-            .dispatch('login', {
-              user: this.loginForm.user,
-              password: this.loginForm.password
-            })
-            .then(data => {
-              if (data.success) {
-                if (data.match) {
-                  // TODO: 登陆成功跳转逻辑
-                  this.$Message.success('登录成功！');
-                } else {
-                  this.$Message.error('密码错误！请重试');
-                }
+          this.Login({
+            user: this.loginForm.user,
+            password: this.loginForm.password
+          }).then(data => {
+            if (data.success) {
+              if (data.match) {
+                this.$Message.success('登录成功');
+                setCookie('username', this.loginForm.user, 1000 * 60);
+                setTimeout(
+                  function() {
+                    this.$refs[name].resetFields();
+                    this.$router.push('/home');
+                  }.bind(this),
+                  1000
+                );
               } else {
-                this.$Message.error('该用户不存在！请先注册');
+                this.$Message.error('密码错误！请重试');
               }
-            });
+            } else {
+              this.$Message.error('该用户不存在！请先注册');
+            }
+          });
         }
       });
-    }
-    // ...mapActions({ httpSignup: 'signup', httpLogin: 'login' })
+    },
+    ...mapActions(['Login', 'Signup'])
   }
 };
 </script>

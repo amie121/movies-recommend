@@ -33,7 +33,6 @@ export default {
           _starsArr.push(0);
         }
       }
-      console.log(_starsArr, this.score);
       return _starsArr;
     }
   }

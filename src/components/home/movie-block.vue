@@ -67,11 +67,9 @@ export default {
   },
   methods: {
     enter() {
-      console.log('enter');
       this.carousel.autoplay = false;
     },
     leave() {
-      console.log('leave');
       this.carousel.autoplay = true;
     }
   },
