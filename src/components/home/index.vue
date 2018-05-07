@@ -34,6 +34,7 @@
 
 <script>
 import { getCookie, delCookie } from '../../utils/cookie';
+import { mapActions, mapGetters } from '_vuex@3.0.1@vuex';
 import movieBlock from './movie-block';
 import likeList from './like-list';
 
@@ -44,16 +45,18 @@ export default {
       search: ''
     };
   },
+
   mounted() {
-    /*页面挂载获取保存的cookie值，渲染到页面上*/
+    // 页面挂载获取保存的cookie值，渲染到页面上
     let uname = getCookie('username');
     this.username = uname;
-    /*如果cookie不存在，则跳转到登录页*/
+    // 如果cookie不存在，则跳转到登录页
     if (uname == '') {
       this.$router.push('/login');
     }
   },
   methods: {
+    // 登出
     logout() {
       delCookie('username');
       this.$router.push('/login');

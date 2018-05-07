@@ -58,7 +58,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         }
       ]
     },
-    hot: true,
+    hot: false,
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
     host: HOST || config.dev.host,

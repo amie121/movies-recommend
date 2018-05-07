@@ -1,16 +1,16 @@
 <template>
-  <div class="movie-container" :data-movieId="movieId">
-    <img class="movie-img" :src="coverUrl" />
-    <p class="movie-title">{{title}}</p>
-    <Stars :stars="stars" :score="average"></Stars>
+  <div class="movie-container" :data-movieId="movieInfo.id" @click="goToDetail(movieInfo.id)">
+    <img class="movie-img" :src="movieInfo.images.large" />
+    <p class="movie-title">{{movieInfo.title}}</p>
+    <Stars :stars="movieInfo.rating.stars" :score="movieInfo.rating.average"></Stars>
     <div class="handle">
-      <Dropdown transfer>
+      <Dropdown transfer @on-click="addLikeList">
         <Button type="primary" size="small">
             操作
           <Icon type="arrow-down-b"></Icon>
         </Button>
         <DropdownMenu slot="list">
-          <DropdownItem>加入收藏列表</DropdownItem>
+          <DropdownItem name="add">加入收藏列表</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
@@ -21,16 +21,15 @@
 import stars from './stars';
 
 export default {
+  props: ['movieInfo'],
   data() {
-    return {
-      movieId: '4920389',
-      coverUrl:
-        'https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2516578307.jpg',
-      title: '头号玩家头号玩家头号玩家头号玩家',
-      stars: 35,
-      average: 8.9,
-      like: false
-    };
+    return {};
+  },
+  methods: {
+    goToDetail(id) {
+      this.$router.push(`/home/detail/${id}`);
+    },
+    addLikeList(name) {}
   },
   components: {
     Stars: stars

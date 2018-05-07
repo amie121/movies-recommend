@@ -2,7 +2,7 @@
 <div class="block-wrapper">
   <div class="subtitle">
     {{title}}
-    <span class="more-movie">更多>>></span>
+    <span v-if="more" class="more-movie" @click="loadMore()">更多>>></span>
   </div>
   <Carousel class="carousel"
     :autoplay="carousel.autoplay"
@@ -10,41 +10,10 @@
     :dots="carousel.showdots"
     @mouseenter.native="enter"
     @mouseleave.native="leave">
-    <CarouselItem>
+    <CarouselItem v-for="group in movieData" :key="group[0].title">
       <Row class="item-row" type="flex" justify="space-around">
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-      </Row>
-    </CarouselItem>
-    <CarouselItem>
-      <Row class="item-row" type="flex" justify="space-around">
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
-        </Col>
-        <Col span="4">
-          <Movie></Movie>
+        <Col span="4" v-for="movie in group" :key="movie.movieId">
+          <Movie :movieInfo="movie"></Movie>
         </Col>
       </Row>
     </CarouselItem>
@@ -55,7 +24,17 @@
 <script>
 import movie from './movie';
 export default {
-  props: ['title', 'movieData'],
+  props: {
+    title: {
+      require: true
+    },
+    movieData: {
+      require: true
+    },
+    more: {
+      default: false
+    }
+  },
   data() {
     return {
       carousel: {
@@ -71,6 +50,9 @@ export default {
     },
     leave() {
       this.carousel.autoplay = true;
+    },
+    loadMore() {
+      this.$router.push({ path: '/home/grid/top250' });
     }
   },
   components: {

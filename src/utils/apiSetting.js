@@ -1,5 +1,3 @@
-const baseUrl = 'https://douban.uieee.com';
-
 const api = {
   login: {
     url: '/api/login/loginUser',
@@ -9,16 +7,16 @@ const api = {
     url: '/api/login/createUser',
     method: 'post'
   },
-  theathers: {
-    url: baseUrl + '/v2/movie/in_theaters',
+  in_theathers: {
+    url: '/movie/in_theaters',
     method: 'get'
   },
   coming_soon: {
-    url: baseUrl + '/v2/movie/coming_soon',
+    url: '/movie/coming_soon',
     method: 'get'
   },
   top250: {
-    url: baseUrl + '/v2/movie/top250',
+    url: '/movie/top250',
     method: 'get'
   }
 };
