@@ -57,6 +57,7 @@ export function getMovies({ state, commit }) {
 }
 
 export function getTop250({ state, commit }, page = 1) {
+  commit(types.CLEAR_MOVIEGRID);
   const query = {
     start: (page - 1) * 20,
     count: 20
@@ -76,6 +77,21 @@ export function getMovieDetail({ state, commit }, movieId) {
   http(request)
     .then(res => {
       commit(types.SET_DETAIL, res.data);
+    })
+    .catch(err => console.log(err));
+}
+
+export function searchMovies({ state, commit }, payload) {
+  commit(types.CLEAR_MOVIEGRID);
+  const page = payload.page || 1;
+  const query = {
+    q: payload.q,
+    start: (page - 1) * 20,
+    count: 20
+  };
+  http(API.search, query)
+    .then(res => {
+      commit(types.SET_MOVIEGRID, res.data);
     })
     .catch(err => console.log(err));
 }

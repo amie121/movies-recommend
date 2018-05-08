@@ -18,6 +18,10 @@ const api = {
   top250: {
     url: '/movie/top250',
     method: 'get'
+  },
+  search: {
+    url: '/movie/search',
+    method: 'get'
   }
 };
 

@@ -13,7 +13,7 @@
           <img class="head-icon" src="../../assets/images/dianying_hl.png" alt="" width="30" height="30">
           <h1 class="title">电影推荐</h1>
           <Input v-model="search">
-            <Button slot="append" icon="ios-search"></Button>
+            <Button slot="append" icon="ios-search" @click="onSearch"></Button>
           </Input>
         </div>
       </div>
@@ -34,7 +34,6 @@
 
 <script>
 import { getCookie, delCookie } from '../../utils/cookie';
-import { mapActions, mapGetters } from '_vuex@3.0.1@vuex';
 import movieBlock from './movie-block';
 import likeList from './like-list';
 
@@ -60,6 +59,10 @@ export default {
     logout() {
       delCookie('username');
       this.$router.push('/login');
+    },
+    onSearch() {
+      const q = this.search;
+      this.$router.push({ path: '/home/grid/search', query: { q } });
     }
   },
   components: {

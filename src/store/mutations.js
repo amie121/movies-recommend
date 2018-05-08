@@ -16,6 +16,9 @@ const mutations = {
   [types.SET_MOVIEGRID](state, movies) {
     state.grid = movies;
   },
+  [types.CLEAR_MOVIEGRID](state) {
+    state.grid = {};
+  },
   [types.SET_DETAIL](state, detail) {
     state.detail = detail;
   }

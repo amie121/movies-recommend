@@ -7,7 +7,7 @@
         <Movie :movieInfo="movie"></Movie>
       </Col>
     </Row>
-    <Page :total="this.movieGrid.total" :page-size="pagesize" show-total @on-change="changePage"></Page>
+    <Page :total="this.movieGrid.total" :current="current" :page-size="pagesize" show-total @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -19,13 +19,29 @@ export default {
   data() {
     return {
       type: '',
-      pagesize: 20
+      pagesize: 20,
+      current: 1,
+      query: ''
     };
   },
   created() {
     this.type = this.$route.params.list;
     if (this.type === 'top250') {
       this.getTop250();
+    } else if (this.type === 'search') {
+      this.query = this.$route.query;
+      const payload = {
+        q: this.query.q
+      };
+      this.searchMovies(payload);
+    }
+  },
+  watch: {
+    $route: function(val, old) {
+      if (this.type === 'search') {
+        this.query = this.$route.query;
+        this.searchMovies({ q: this.query.q });
+      }
     }
   },
   computed: {
@@ -33,9 +49,17 @@ export default {
   },
   methods: {
     changePage(page) {
-      this.getTop250(page);
+      if (this.type === 'top250') {
+        this.getTop250(page);
+      } else if (this.type === 'search') {
+        const payload = {
+          q: this.query.q,
+          page: page
+        };
+        this.searchMovies(payload);
+      }
     },
-    ...mapActions(['getTop250'])
+    ...mapActions(['getTop250', 'searchMovies'])
   },
   components: {
     Movie: movie
